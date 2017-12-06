@@ -3,6 +3,9 @@ These scripts support the deployment of WebJobs OR Function Apps to Azure App Se
 
 ## PowerShell
 
+### How to execute
+Take the powershell script and place it in a different folder as the runtime bits of your job. Take the example call and use it to package and deploy the folder that the job's binaries / scripts.
+
 Example execution:
 
 ```

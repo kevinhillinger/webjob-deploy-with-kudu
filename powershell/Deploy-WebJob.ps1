@@ -61,11 +61,9 @@ function getHttpHeaders($publishProfile) {
    return $headers
 }
 
-function deployPackage($siteName, $jobType, $packagePath, $headers) {
+function deployPackage($siteName, $jobType, $packageFilePath, $headers) {
    $apiUrl = "https://$siteName.scm.azurewebsites.net/api/zipdeploy"
-	$result = Invoke-RestMethod -Uri $apiUrl -Headers $headers -ContentType "multipart/form-data" -Method POST -InFile $packagePath
-
-   $result
+	$result = Invoke-RestMethod -Uri $apiUrl -Headers $headers -ContentType "multipart/form-data" -Method POST -InFile $packageFilePath
 }
 
 # for more info, see https://github.com/projectkudu/kudu/wiki/Deploying-from-a-zip-file
@@ -75,15 +73,15 @@ function Deploy-WebJob() {
     Write-Output "Creating WebJob package"
 
     $zipFileName = "WebJob.zip"
-    $packagePath = createPackage -zipFileName $zipFileName -folderPath $WebJobPath
+    $packageFilePath = createPackage -zipFileName $zipFileName -folderPath $WebJobPath
 
     $publishProfile = getPublishProfile
 
     $headers = getHttpHeaders -publishProfile $publishProfile
     $siteName = $publishProfile.msdeploySite
 
-    Write-Output "Deploying WebJob to $siteName"
-    deployPackage -siteName $siteName -jobType $WebJobType -packagePath $packagePath -headers $headers
+    Write-Output "Deploying WebJob to $siteName..."
+    deployPackage -siteName $siteName -jobType $WebJobType -packageFilePath $packageFilePath -headers $headers
 
     Write-Output "$WebJobName Deployment complete."
 
